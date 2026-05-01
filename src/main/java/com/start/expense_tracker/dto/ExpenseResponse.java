@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.start.expense_tracker.entity.Category;
 
@@ -31,6 +32,7 @@ public class ExpenseResponse {
 
 	private String description;
 
+//	@JsonIgnore
 	private BigDecimal amount;
 	
 	private Category category;
