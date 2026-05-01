@@ -32,6 +32,7 @@ public class AuthController {
 		 authService.register(request);
 		
 		ApiResponse<Void> response = ApiResponse.<Void>builder().success(true)
+				                    .httpStatus(HttpStatus.CREATED.value())  
 									.message("User Register Successfully")
 									.data(null)
 									.timestamp(LocalDateTime.now())
@@ -47,6 +48,7 @@ public class AuthController {
 		AuthResponse authResponse = authService.login(request);
 		
 		ApiResponse<AuthResponse> response = ApiResponse.<AuthResponse>builder().success(true)
+				                           .httpStatus(HttpStatus.OK.value())  
 				                           .message("Login successful!")
 		                                   .data(authResponse)
 		                                   .timestamp(LocalDateTime.now())
@@ -61,6 +63,7 @@ public class AuthController {
   
 		AuthResponse authResponse = authService.refreshToken(request);
 		 ApiResponse<AuthResponse> apiResponse = ApiResponse.<AuthResponse>builder().success(true)
+				                                                                     .httpStatus(HttpStatus.OK.value())  
 				                                                                    .message("Token refreshed successfully!")
 																			       .data(authResponse)
 																			       .timestamp(LocalDateTime.now())
@@ -76,7 +79,8 @@ public ResponseEntity<ApiResponse<Void>> logout(@RequestBody RefreshTokenRequest
 	authService.logout(request);
 
 	ApiResponse<Void> response = ApiResponse.<Void>builder().success(true)
-			                                                .message("Logged out successfully!")
+			                                                  .httpStatus(HttpStatus.OK.value())  
+			                                                 .message("Logged out successfully!")
 			                                                .data(null)
 			                                                .timestamp(LocalDateTime.now())
 			                                                .build();

@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleNotFound(ResourceNotFoundException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler {
                 .orElse("Validation failed");
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST.value())
                 .message(errorMessage)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -63,6 +65,7 @@ public class GlobalExceptionHandler {
         }
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST.value())
                 .message(message)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -74,6 +77,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.UNAUTHORIZED.value())
                 .message("Invalid username or password!")
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -85,6 +89,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleUsernameNotFound(UsernameNotFoundException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -94,21 +99,21 @@ public class GlobalExceptionHandler {
     // ✅ Handle Duplicate Username / Email & Expired Token
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntime(RuntimeException ex) {
-        // Determine correct HTTP status based on message
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         if (ex.getMessage().contains("already exists")) {
-            status = HttpStatus.CONFLICT;           // 409
+            status = HttpStatus.CONFLICT;
         } else if (ex.getMessage().contains("expired")) {
-            status = HttpStatus.UNAUTHORIZED;       // 401
+            status = HttpStatus.UNAUTHORIZED;
         } else if (ex.getMessage().contains("Invalid refresh token")) {
-            status = HttpStatus.UNAUTHORIZED;       // 401
+            status = HttpStatus.UNAUTHORIZED;
         } else if (ex.getMessage().contains("not found")) {
-            status = HttpStatus.NOT_FOUND;          // 404
+            status = HttpStatus.NOT_FOUND;
         }
 
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(status.value())           // ← dynamic based on message
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -120,6 +125,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleDisabled(DisabledException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.FORBIDDEN.value())
                 .message("Your account is disabled. Please contact support.")
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -131,6 +137,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleLocked(LockedException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.FORBIDDEN.value())
                 .message("Your account is locked. Please contact support.")
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -142,6 +149,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleInvalidEnum(IllegalArgumentException ex) {
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid category value")
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -154,6 +162,7 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error occurred: {}", ex.getMessage());
         ApiResponse<Void> response = ApiResponse.<Void>builder()
                 .success(false)
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("Something went wrong")
                 .timestamp(LocalDateTime.now())
                 .build();

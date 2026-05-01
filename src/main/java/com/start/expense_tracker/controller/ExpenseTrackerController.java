@@ -46,6 +46,7 @@ public class ExpenseTrackerController {
 		ExpenseResponse expenseResponse = expenseService.createExpense(request);
 		ApiResponse<ExpenseResponse> apiResponse = ApiResponse.<ExpenseResponse>builder()
 				.success(true)
+				.httpStatus(HttpStatus.CREATED.value())  
 				.message(ExpenseMessages.CREATED)
 				.data(expenseResponse)
 				.timestamp(LocalDateTime.now())
@@ -63,6 +64,7 @@ public class ExpenseTrackerController {
 		List<ExpenseResponse> allExpenses = expenseService.getAllExpenses();
 		ApiResponse<List<ExpenseResponse>> apiResponse = ApiResponse.<List<ExpenseResponse>>builder()
 				.success(true)
+				.httpStatus(HttpStatus.OK.value())  
 				.message(ExpenseMessages.FETCHED)
 				.data(allExpenses)
 				.timestamp(LocalDateTime.now())
@@ -108,6 +110,7 @@ public class ExpenseTrackerController {
 	    ApiResponse<ExpenseSummaryResponse> apiResponse =
 	            ApiResponse.<ExpenseSummaryResponse>builder()
 	                    .success(true)
+	                    .httpStatus(HttpStatus.OK.value())  
 	                    .message(ExpenseMessages.TOTAL_SUMMARY_FETCHED)
 	                    .data(summary)
 	                    .timestamp(LocalDateTime.now())
@@ -124,6 +127,7 @@ public class ExpenseTrackerController {
 	    ApiResponse<ExpenseSummaryResponse> apiResponse =
 	            ApiResponse.<ExpenseSummaryResponse>builder()
 	                    .success(true)
+	                    .httpStatus(HttpStatus.OK.value())  
 	                    .message(ExpenseMessages.MONTHLY_SUMMARY_FETCHED)
 	                    .data(summary)
 	                    .timestamp(LocalDateTime.now())
@@ -141,6 +145,7 @@ public class ExpenseTrackerController {
 	    ApiResponse<List<ExpenseResponse>> apiResponse =
 	            ApiResponse.<List<ExpenseResponse>>builder()
 	                    .success(true)
+	                    .httpStatus(HttpStatus.OK.value())  
 	                    .message(ExpenseMessages.EXPENSES_BY_CATEGORY_FETCHED)
 	                    .data(expenses)
 	                    .timestamp(LocalDateTime.now())
@@ -157,6 +162,7 @@ public class ExpenseTrackerController {
 	    ApiResponse<List<ExpenseResponse>> apiResponse =
 	            ApiResponse.<List<ExpenseResponse>>builder()
 	                    .success(true)
+	                    .httpStatus(HttpStatus.OK.value())  
 	                    .message(ExpenseMessages.EXPENSES_BY_IDS_FETCHED)
 	                    .data(expenses)
 	                    .timestamp(LocalDateTime.now())
