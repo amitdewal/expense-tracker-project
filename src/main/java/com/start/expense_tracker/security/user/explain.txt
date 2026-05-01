@@ -1,0 +1,9 @@
+Spring Security calls loadUserByUsername("john")
+            ↓
+Search "john" in users table
+            ↓
+    Found?          Not Found?
+      ↓                  ↓
+Return UserDetails    Throw UsernameNotFoundException
+(username, password,
+    authorities)

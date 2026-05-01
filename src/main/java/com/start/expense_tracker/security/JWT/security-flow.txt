@@ -1,0 +1,18 @@
+Every Request
+     ↓
+Step 1: Read "Authorization" header
+     ↓
+Step 2: Does it start with "Bearer "?
+     ↓ YES                    ↓ NO
+Extract token            Skip → continue request
+     ↓
+Step 3: Extract username from token
+     ↓
+Step 4: Load user from DB
+     ↓
+Step 5: Validate token (username match + not expired)
+     ↓ VALID                  ↓ INVALID
+Set authentication       Skip → request is unauthenticated
+in SecurityContext
+     ↓
+Step 6: Continue to Controller
