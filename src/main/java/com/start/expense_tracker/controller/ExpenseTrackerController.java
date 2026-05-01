@@ -26,7 +26,9 @@ import com.start.expense_tracker.dto.ExpenseResponse;
 import com.start.expense_tracker.dto.ExpenseSummaryResponse;
 import com.start.expense_tracker.entity.Category;
 import com.start.expense_tracker.service.ExpenseService;
+import com.start.expense_tracker.service.config.ExpenseCsvService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExpenseTrackerController {
 
 	private final ExpenseService expenseService;
+	private final ExpenseCsvService expenseCsvService;
 
 
 	Logger logger = LoggerFactory.getLogger(ExpenseTrackerController.class);
@@ -79,6 +82,7 @@ public class ExpenseTrackerController {
 		ExpenseResponse updatedExpense = expenseService.updateExpense(id, request);
 		ApiResponse<ExpenseResponse> apiResponse = ApiResponse.<ExpenseResponse>builder()
 				.success(true)
+				.httpStatus(HttpStatus.OK.value())
 				.message(ExpenseMessages.UPDATED)
 				.data(updatedExpense)
 				.timestamp(LocalDateTime.now()).build();
@@ -91,6 +95,7 @@ public class ExpenseTrackerController {
 	    expenseService.deleteExpense(id);
 	    ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
 	            .success(true)
+	            .httpStatus(HttpStatus.OK.value())
 	            .message(ExpenseMessages.DELETED)
 	            .data(null)
 	            .timestamp(LocalDateTime.now())
@@ -171,4 +176,11 @@ public class ExpenseTrackerController {
 	    return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 
 }
+	// ===== CSV Export =====
+	
+	@GetMapping("/export")
+	public void exportToCsv(HttpServletResponse response) {
+	    expenseCsvService.exportExpensesToCsv(response);
+	    log.info("CSV export triggered");
+	}
 }
