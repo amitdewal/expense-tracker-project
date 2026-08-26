@@ -9,7 +9,9 @@ import java.util.Locale;
 import org.springframework.stereotype.Service;
 
 import com.start.expense_tracker.entity.Expense;
+import com.start.expense_tracker.entity.User;
 import com.start.expense_tracker.repository.ExpensesRepository;
+import com.start.expense_tracker.security.utils.SecurityUtils;
 import com.start.expense_tracker.service.config.ExpenseCsvService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExpenseCsvServiceImpl implements ExpenseCsvService {
 	
 	private final ExpensesRepository repository;
-	
+	private final SecurityUtils securityUtils;
 	// ===== Clean date format =====
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -30,6 +32,7 @@ public class ExpenseCsvServiceImpl implements ExpenseCsvService {
 
 	@Override
 	public void exportExpensesToCsv(HttpServletResponse response) {
+		 User currentUser = securityUtils.getCurrentUser();
 		DateTimeFormatter fileFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
 
 		String fileName = "expenses-" + LocalDateTime.now().format(fileFormatter) + ".csv";
@@ -43,7 +46,7 @@ public class ExpenseCsvServiceImpl implements ExpenseCsvService {
 		
 		  // Step 2: Fetch all expenses
 		
-		List<Expense> expenses = repository.findAll();
+		List<Expense> expenses = repository.findByUser(currentUser);
 		
 		try {
 			// Step 3: Write CSV header row
